@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Risk Dashboard — Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFAF7; --bg-warm:#FFF5EF;
+  --coral:#E8654A; --coral-deep:#D4502F; --coral-light:#F4A68E; --coral-pale:#FDE8E1;
+  --blue:#2563EB; --blue-pale:#DBEAFE;
+  --navy:#1B2238; --navy-2:#232B47;
+  --cream:#FFF1EB; --sand:#F5E6DC; --warm:#F5DDD3;
+  --text:#292524; --text-secondary:#57534E; --gray:#78716C; --light-gray:#E7E5E4;
+  --on-dark:#FFF7F3; --on-dark-muted:#B8B5C9; --border-dark:rgba(255,255,255,0.12);
+  --rainbow:linear-gradient(90deg,#EE352E,#FF6319,#FCCC0A,#00933C,#0039A6,#B933AD,#E8654A);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--text);background:var(--bg);font-size:16px;line-height:1.65;overflow-x:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+section{padding:92px 0;position:relative}
+.section-label{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:3px;color:var(--coral);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-label::before{content:'';width:8px;height:8px;border-radius:50%;border:2px solid var(--coral);flex-shrink:0}
+.section-label::after{content:'';flex:0 0 60px;height:2px;background:var(--coral);opacity:0.25}
+.dark .section-label{color:var(--coral-light)}
+.dark .section-label::before{border-color:var(--coral-light)}
+.dark .section-label::after{background:var(--coral-light)}
+h1,h2{font-weight:800;letter-spacing:-1px}
+h2{font-size:38px;line-height:1.15;margin-bottom:18px}
+h2 em{font-style:italic;color:var(--coral)}
+.dark h2 em{color:var(--coral-light)}
+.lead{font-size:18px;color:var(--text-secondary);max-width:760px;margin-bottom:40px}
+.dark{background:var(--navy);color:var(--on-dark)}
+.dark .lead{color:var(--on-dark-muted)}
+.alt{background:var(--bg-warm)}
+.rainbow-bar{height:4px;background:var(--rainbow)}
+.rainbow-bar.thin{height:2px}
+
+/* dot grid texture */
+.dot-grid{background-image:radial-gradient(circle,var(--coral) 0.8px,transparent 0.8px);background-size:32px 32px;position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:0.06}
+
+/* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50}
+.topbar .bar{background:rgba(255,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--sand)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.topbar .name{color:var(--text);font-weight:800;font-size:16px;letter-spacing:-0.5px;text-decoration:none}
+.topbar .name em{font-style:italic;color:var(--coral)}
+.topbar .meta{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray)}
+
+/* side rail */
+.rail{position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:2px}
+.rail a{display:flex;align-items:center;gap:10px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:13.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);text-decoration:none;border-left:3px solid var(--sand);transition:color .15s,border-color .15s}
+.rail a:hover{color:var(--text)}
+.rail a.active{color:var(--coral);border-left-color:var(--coral);font-weight:500}
+@media(max-width:1100px){.rail{display:none}}
+@media(min-width:1101px){.wrap{max-width:1060px;padding:0 48px 0 200px}}
+
+/* hero */
+.hero{padding:170px 0 110px;background:var(--bg)}
+.hero h1{font-size:52px;line-height:1.08;max-width:900px;margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--coral)}
+.hero .lead{font-size:19px;max-width:730px}
+.hero .tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--coral-deep);background:var(--coral-pale);border:1px solid var(--warm);padding:8px 16px;border-radius:999px}
+
+/* two-column contrast */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 10px}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
+.split .side{border:1px solid var(--sand);border-radius:12px;padding:26px 28px;background:#fff}
+.split .side.human{border-top:3px solid var(--blue)}
+.split .side.ai{border-top:3px solid var(--coral)}
+.split .k{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.split .ai .k{color:var(--coral)}
+.split .human .k{color:var(--blue)}
+.split li{list-style:none;font-size:16px;font-weight:600;padding:7px 0;color:var(--text);line-height:1.45}
+.split li::before{content:'\2014\00a0\00a0';color:var(--gray);font-weight:400}
+.fineprint{font-size:13.5px;color:var(--gray);margin-bottom:34px}
+.kicker{font-size:16px;color:var(--text-secondary);max-width:780px;margin-bottom:6px}
+
+/* spine strip */
+.spine{display:flex;align-items:stretch;margin-top:48px;border:1px solid var(--sand);border-radius:12px;overflow:hidden;background:#fff}
+.spine .step{flex:1;padding:24px 26px}
+.spine .step+.step{border-left:1px solid var(--sand)}
+.spine .step .k{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:8px}
+.spine .step p{font-size:14px;color:var(--text-secondary)}
+@media(max-width:860px){.spine{flex-direction:column}.spine .step+.step{border-left:none;border-top:1px solid var(--sand)}}
+
+/* build accordion */
+.wf{border:1px solid var(--sand);border-radius:12px;background:#fff;margin-bottom:10px;overflow:hidden}
+.wf-head{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;background:none;border:none;font-family:'DM Sans',sans-serif;text-align:left;padding:18px 22px;cursor:pointer;transition:background .15s}
+.wf-head:hover{background:var(--bg-warm)}
+.wf-head .htxt{display:flex;flex-direction:column;gap:3px}
+.wf-head h3{font-size:16.5px;font-weight:700;letter-spacing:-0.2px;color:var(--text)}
+.wf-head .kn{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--coral)}
+.wf-head .chev{flex:none;width:22px;height:22px;border:1.5px solid var(--warm);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s cubic-bezier(0.2,0.8,0.2,1),border-color .15s}
+.wf-head .chev svg{width:10px;height:10px;stroke:var(--gray)}
+.wf.open .wf-head{padding-bottom:6px}
+.wf.open .chev{transform:rotate(45deg);border-color:var(--coral)}
+.wf-body{display:none;padding:6px 22px 22px;color:var(--text-secondary);font-size:15px;max-width:760px}
+.wf.open .wf-body{display:block;animation:panel .3s cubic-bezier(0.2,0.8,0.2,1)}
+.wf-body ul{margin:6px 0 0;padding-left:0;list-style:none}
+.wf-body li{padding:5px 0;position:relative;padding-left:20px}
+.wf-body li::before{content:'';position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--coral-light)}
+.wf-body .tag2{display:inline-block;margin-top:12px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);background:var(--blue-pale);padding:5px 12px;border-radius:999px}
+@keyframes panel{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* roadmap tiers */
+.tier{margin-bottom:40px}
+.tier-label{display:flex;align-items:baseline;gap:14px;margin-bottom:18px}
+.tier-label h3{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.tier-label span{font-size:13.5px;color:var(--gray)}
+.row{display:grid;grid-template-columns:200px 1fr 1fr;gap:24px;align-items:start;padding:19px 22px;border:1px solid var(--sand);border-radius:12px;transition:background .15s;background:#fff;margin-bottom:10px}
+.row:hover{background:var(--bg-warm)}
+.row .ph{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--coral-deep);font-weight:500}
+.row .item{font-weight:600;font-size:15px}
+.row .why{font-size:14px;color:var(--text-secondary)}
+.row .why b{color:var(--text);font-weight:700}
+@media(max-width:860px){.row{grid-template-columns:1fr;gap:8px}}
+.aside{border-left:3px solid var(--coral);background:var(--cream);padding:17px 22px;margin-top:14px;font-size:14.5px;color:var(--text-secondary);border-radius:0 10px 10px 0}
+.aside b{color:var(--text)}
+
+/* price */
+.price-block{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
+@media(max-width:860px){.price-block{grid-template-columns:1fr;gap:28px}}
+.price-num{font-size:88px;font-weight:800;letter-spacing:-3px;line-height:1;color:var(--text)}
+.price-num span{color:var(--coral)}
+.price-tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:12px}
+.price-value{font-size:16.5px;color:var(--text-secondary);margin-top:16px;max-width:400px}
+.paytable{border:1px solid var(--sand);border-radius:12px;overflow:hidden;background:#fff}
+.payrow{display:grid;grid-template-columns:130px 1fr;gap:0;align-items:center}
+.payrow+.payrow{border-top:1px solid var(--sand)}
+.payrow .amt{font-size:26px;font-weight:800;letter-spacing:-1px;padding:22px 26px;color:var(--text);border-right:1px solid var(--sand)}
+.payrow .amt.two{color:var(--coral)}
+.payrow .when{padding:22px 26px}
+.payrow .when .w-k{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:4px}
+.payrow .when p{font-size:15px;color:var(--text-secondary)}
+
+/* scope in/out */
+.scope{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
+@media(max-width:860px){.scope{grid-template-columns:1fr}}
+.scope .col{border:1px solid var(--sand);border-radius:12px;padding:26px 28px;background:#fff}
+.scope .col.in{border-top:3px solid var(--coral)}
+.scope .col.out{border-top:3px solid var(--gray);background:var(--bg-warm)}
+.scope .col .k{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.scope .in .k{color:var(--coral)}
+.scope .out .k{color:var(--gray)}
+.scope ul{list-style:none}
+.scope li{font-size:15px;padding:8px 0;padding-left:26px;position:relative;line-height:1.4}
+.scope li b{font-weight:700}
+.scope .in li::before{content:'+';position:absolute;left:2px;top:7px;color:var(--coral);font-weight:800;font-size:16px}
+.scope .out li{color:var(--text-secondary)}
+.scope .out li::before{content:'\2192';position:absolute;left:2px;top:8px;color:var(--gray);font-weight:700}
+.scope .out li em{font-style:normal;color:var(--gray);font-size:13px;display:block;margin-top:1px}
+.assume{border:1px solid var(--sand);border-radius:12px;background:#fff;padding:8px 4px}
+.assume .a{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:14px 24px;align-items:start}
+.assume .a+.a{border-top:1px solid var(--sand)}
+.assume .a .n{font-family:'DM Mono',monospace;font-size:11px;color:var(--coral);font-weight:500;padding-top:2px}
+.assume .a p{font-size:14.5px;color:var(--text-secondary)}
+.assume .a p b{color:var(--text);font-weight:700}
+.assume-lead{font-size:14.5px;color:var(--gray);margin-bottom:16px;font-style:italic}
+
+/* trust dark band */
+.guard-quote{font-size:32px;font-weight:800;letter-spacing:-0.8px;line-height:1.28;max-width:820px;margin-bottom:36px}
+.guard-quote em{font-style:italic;color:var(--coral-light)}
+.guard-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:980px}
+@media(max-width:860px){.guard-cols{grid-template-columns:1fr}}
+.guard-cols .col{border-top:1px solid var(--border-dark);padding-top:18px}
+.guard-cols .col h3{font-size:15px;font-weight:700;color:var(--on-dark);margin-bottom:8px}
+.guard-cols .col p{font-size:14.5px;color:var(--on-dark-muted)}
+.counsel{margin-top:36px;font-size:13px;color:var(--on-dark-muted);font-style:italic}
+
+/* next steps */
+.steps{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:36px}
+@media(max-width:980px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.step-card{border:1px solid var(--sand);border-radius:12px;padding:24px;background:#fff}
+.step-card .k{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--coral-light);margin-bottom:10px}
+.step-card h3{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-0.2px;line-height:1.25}
+.step-card p{font-size:13.5px;color:var(--text-secondary)}
+.cta{margin-top:52px;border-top:1px solid var(--sand);padding-top:36px;display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.cta .line{font-size:21px;font-weight:800;letter-spacing:-0.5px;max-width:560px}
+.cta .line em{font-style:italic;color:var(--coral)}
+.cta .note{font-size:13.5px;color:var(--gray);max-width:300px}
+footer{padding:26px 0;background:var(--bg)}
+footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);flex-wrap:wrap;gap:8px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="rainbow-bar"></div>
+  <div class="bar">
+    <div class="wrap">
+      <a class="name" href="#top">Customer Risk Dashboard · <em>Proposal</em></a>
+      <div class="meta">Atlantic Labs AI · Fixed price</div>
+    </div>
+  </div>
+</div>
+
+<nav class="rail" id="rail">
+  <a href="#picture" data-nav>Picture</a>
+  <a href="#build" data-nav>Build</a>
+  <a href="#delivery" data-nav>Delivery</a>
+  <a href="#price" data-nav>Price</a>
+  <a href="#scope" data-nav>Scope</a>
+  <a href="#trust" data-nav>Trust</a>
+  <a href="#next" data-nav>Next</a>
+</nav>
+
+<section class="hero" id="top">
+  <div class="dot-grid"></div>
+  <div class="wrap" style="position:relative">
+    <div class="section-label">Customer Risk Dashboard</div>
+    <h1>See churn coming. <em>Act before it costs you the account.</em></h1>
+    <p class="lead">One ranked, explainable view of who's at risk across Core and Premier — an overall churn-risk rating, the reason it's flagged, and the evidence behind it. Built as a scoring layer and dashboard page on top of the customer intelligence database you already run.</p>
+    <div class="tags">
+      <span class="tag">Core + Premier segments</span>
+      <span class="tag">Explainable, per account</span>
+      <span class="tag">On your existing dashboard</span>
+      <span class="tag">Daily refresh</span>
+    </div>
+    <div class="spine" style="margin-top:40px">
+      <div class="step"><div class="k">Your existing warehouse</div><p>The customer intelligence database that already ingests, links, and analyzes your source data</p></div>
+      <div class="step"><div class="k">Risk scoring model</div><p>Jack's signal catalog, encoded into transparent, segment-aware, calibrated scoring</p></div>
+      <div class="step"><div class="k">One ranked, explainable view</div><p>Every at-risk account, rated and typed, with a plain-English reason and linked evidence</p></div>
+    </div>
+  </div>
+</section>
+<div class="rainbow-bar thin"></div>
+
+<section id="picture">
+  <div class="wrap">
+    <div class="section-label">The big picture</div>
+    <h2>The real work is the model, <em>not the view</em></h2>
+    <p class="lead">Turning nineteen signals from many sources into one score a person trusts and acts on is the hard part. The scoring engine does that work; the judgment behind it stays Jack's.</p>
+    <div class="split">
+      <div class="side ai">
+        <div class="k">The model does the scoring</div>
+        <ul>
+          <li>Transparent weighted scoring — you can always see why an account scored the way it did</li>
+          <li>Segment-aware, with renewal proximity as a multiplier</li>
+          <li>Calibrated against accounts you already know went wrong</li>
+        </ul>
+      </div>
+      <div class="side human">
+        <div class="k">Jack keeps control</div>
+        <ul>
+          <li>Owns the definition of risk — what counts and how much</li>
+          <li>Tunes weights and thresholds himself through the calibration controls</li>
+          <li>The judgment stays human; the tool ranks and explains, a person decides</li>
+        </ul>
+      </div>
+    </div>
+    <p class="fineprint">Weighting starts deterministic and simple, leads with Jack's highest-signal factors, and sharpens against real accounts. Thresholds Jack hasn't set yet are wired as tunable parameters, not hard-coded — the definition is expected to firm up as the model runs.</p>
+    <p class="kicker">The goal the whole thing serves is <b style="color:var(--text)">gross retention</b>: a realistic, prioritized outreach list plus the context to guide the conversation.</p>
+    <div class="spine">
+      <div class="step"><div class="k">Read</div><p>The customer intelligence database, plus direct pulls for signals that live outside it (Pendo, ForestAdmin)</p></div>
+      <div class="step"><div class="k">Score</div><p>One overall rating, typed risk tags, and a short "why flagged" summary per account</p></div>
+      <div class="step"><div class="k">Rank</div><p>Prioritized across Core and Premier, weighted so higher-MRR accounts outrank lower ones at equal risk</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="build">
+  <div class="wrap">
+    <div class="section-label">What I'll build</div>
+    <h2>Five parts, <em>one authoritative view</em></h2>
+    <p class="lead">The scoring engine and its calibration are where the work sits. Open any part for what it covers.</p>
+
+    <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 1 · The engine</span><h3>A per-account risk model you can see through</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
+      <div class="wf-body">
+        <p>Jack's signal catalog rolled up into one overall churn-risk rating and typed risk tags — so a flag reads as billing, support, or usage, not just "risky."</p>
+        <ul>
+          <li>Deterministic, weighted scoring — transparent, so you always see why an account scored the way it did</li>
+          <li>Segment-aware weighting: the same signal carries different weight for a Premier account than a Core one, matching how Jack reads risk</li>
+          <li>Renewal proximity as a multiplier — a negative call or sour thread hits harder the closer an account is to renewal</li>
+          <li>Built to extend into Phase 2 scoring on the same backbone, without building it now</li>
+        </ul>
+      </div></div>
+
+    <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 2 · The signals</span><h3>Nineteen signals, drawn from where the data already lives</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
+      <div class="wf-body">
+        <p>Jack's catalog across four groups — product usage and adoption, support and product friction, relationship and sentiment, and contextual events (mergers and acquisitions, executive departures, return-to-office mandates).</p>
+        <ul>
+          <li>Sourced from the customer intelligence database where the data already lives</li>
+          <li>Pulled directly where it doesn't — Pendo usage, configuration state from ForestAdmin, Slack channel tone</li>
+          <li>Thresholds Jack hasn't set yet are wired as tunable parameters, not hard-coded</li>
+        </ul>
+      </div></div>
+
+    <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 3 · The dashboard</span><h3>Where the scored judgment surfaces</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
+      <div class="wf-body">
+        <p>A ranked, prioritized view of at-risk accounts across Core and Premier — delivered as a page on your existing internal dashboard, available across the company, with Success and Support as the primary audience.</p>
+        <ul>
+          <li>Overall rating, typed tags, and a one- or two-sentence "why flagged" summary on every account</li>
+          <li>Filters by Customer Success owner and segment</li>
+          <li>Linked evidence — jump to the underlying ticket, conversation, or call</li>
+          <li>Daily refresh</li>
+        </ul>
+      </div></div>
+
+    <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 4 · The controls</span><h3>Jack tunes the model himself, without a change request</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
+      <div class="wf-body">
+        <p>A simple controls view where Jack adjusts signal weights and thresholds and re-scores — turn a signal up or down, set a threshold, and watch the ranked list shift. This keeps the weighting in his hands day to day and keeps the model honest as the definition of risk sharpens.</p>
+        <ul>
+          <li>A lightweight configuration surface, not a workflow tool</li>
+          <li>Tuning the risk model is included here; acting on a flagged account stays out of Phase 1</li>
+        </ul>
+        <span class="tag2">Slack channel tone — best-effort, pending kickoff access confirmation</span>
+      </div></div>
+
+    <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 5 · Consolidation + calibration</span><h3>The model proven against accounts you already know</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
+      <div class="wf-body">
+        <p>The existing "high-risk customer" artifacts folded into this one authoritative view, so every team reads customer risk in the same place.</p>
+        <ul>
+          <li>The model calibrated against real churned and at-risk accounts Jack provides</li>
+          <li>Weights and thresholds tuned until known cases surface correctly</li>
+          <li>Up to three rounds of hands-on calibration; deeper re-modeling beyond that is billed hourly</li>
+        </ul>
+      </div></div>
+  </div>
+</section>
+
+<section id="delivery">
+  <div class="wrap">
+    <div class="section-label">Delivery plan</div>
+    <h2>Three phases, each with an <em>output you can check</em></h2>
+    <p class="lead">Scoring foundation first, the surface it lives on second, then calibration against your own known cases. Every phase ends on a verifiable result, not a status update.</p>
+
+    <div class="tier">
+      <div class="row">
+        <div class="ph">Phase 1</div>
+        <div class="item">Data and scoring foundation</div>
+        <div class="why">Connect to the customer intelligence database, pull the highest-weight and direct-source signals, and build the engine: composite rating, typed tags, segment-aware weighting, renewal-proximity multiplier. <b>Output: a working risk score per account for Core and Premier, verifiable in data.</b></div>
+      </div>
+      <div class="row">
+        <div class="ph">Phase 2</div>
+        <div class="item">The dashboard surface</div>
+        <div class="why">The ranked view on the internal dashboard — rating, typed tags, semantic summaries, evidence links, and the owner and segment filters, plus the calibration controls where Jack tunes weights and thresholds. Daily refresh in place. <b>Output: the dashboard Success and Support actually use.</b></div>
+      </div>
+      <div class="row">
+        <div class="ph">Phase 3</div>
+        <div class="item">Calibration, consolidation, and QA</div>
+        <div class="why">Validate the model against Jack's known churned and at-risk accounts, tune until known cases surface, fold in the existing artifacts, and run full QA. <b>Output: a calibrated, trusted, single-source-of-truth dashboard.</b></div>
+      </div>
+    </div>
+    <div class="aside"><b>How I work:</b> the shape is set up front; the details firm up organically as real accounts move through the model. Some signals will prove stronger than expected, others noisier — which is exactly why the scoring is tunable and calibration is a real step, not an afterthought.</div>
+  </div>
+</section>
+
+<section class="alt" id="price">
+  <div class="wrap">
+    <div class="section-label">Cost and terms</div>
+    <h2>A fixed price for <em>the model, the surface, and the proof</em></h2>
+    <div class="price-block">
+      <div>
+        <div class="price-tag">Fixed price</div>
+        <div class="price-num">$15<span>,000</span></div>
+        <p class="price-value">Covers the scoring engine that encodes your risk definition, the explainable dashboard and calibration controls where it surfaces, and the calibration that proves it against your own known churn cases.</p>
+      </div>
+      <div class="paytable">
+        <div class="payrow">
+          <div class="amt">$6,000</div>
+          <div class="when"><div class="w-k">Payment one</div><p>Up front, at kickoff</p></div>
+        </div>
+        <div class="payrow">
+          <div class="amt two">$9,000</div>
+          <div class="when"><div class="w-k">Payment two</div><p>On delivery and approval</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="fineprint" style="margin-top:32px;margin-bottom:0">The model, the segment-aware weighting, and the validation are where the work sits. Bug fixes for delivered functionality are included for 30 days after final delivery. All work product — source code, configuration, and documentation — is owned by Insightful on final payment.</p>
+  </div>
+</section>
+
+<section id="scope">
+  <div class="wrap">
+    <div class="section-label">Scope</div>
+    <h2>What's in, and <em>what's held for later</em></h2>
+    <p class="lead">Phase 1 is deliberately a scoring-and-surface project, not an open-ended data-integration one. Naming the edges now keeps the fixed price predictable for both sides.</p>
+    <div class="scope">
+      <div class="col in">
+        <div class="k">In scope — Phase 1</div>
+        <ul>
+          <li><b>The scoring engine</b> — composite rating, typed tags, segment-aware weighting, renewal multiplier</li>
+          <li><b>The dashboard page</b> on your existing internal dashboard, with owner and segment filters and evidence links</li>
+          <li><b>The calibration controls</b> for tuning weights and thresholds</li>
+          <li><b>Direct pulls</b> from Pendo and ForestAdmin; Slack tone best-effort</li>
+          <li><b>Calibration</b> against known churned and at-risk accounts, plus consolidation of existing artifacts</li>
+        </ul>
+      </div>
+      <div class="col out">
+        <div class="k">Held for a later phase</div>
+        <ul>
+          <li>Workflow actions<em>Messages, tasks, owner assignment, acknowledging or overriding flags from inside the tool</em></li>
+          <li>Trend and history views<em>Change-over-time lines and event-timeline storyline views</em></li>
+          <li>Query from Claude / Cursor and Slack<em>The dashboard page is the Phase 1 surface</em></li>
+          <li>Expansion / hot-lead scoring<em>Phase 2, on the same data backbone</em></li>
+          <li>Pixel-perfect UI up front<em>The UI is treated as fungible and refined during the build</em></li>
+        </ul>
+      </div>
+    </div>
+    <p class="assume-lead">These are the things the price rests on. If one turns out different, it's a repricing conversation, not a silent absorption.</p>
+    <div class="assume">
+      <div class="a"><div class="n">01</div><p><b>The customer intelligence database already consolidates most source signals and is queryable.</b> The risk layer builds on top of it. Significant new source ingestion into that database is separate scope.</p></div>
+      <div class="a"><div class="n">02</div><p><b>Risk surfaces as a new layer on the existing infrastructure</b> — a scoring layer plus a dashboard page reading the existing store — not a new standalone database. Daily batch refresh, not real-time.</p></div>
+      <div class="a"><div class="n">03</div><p><b>Direct-source pulls are bounded.</b> Pendo and ForestAdmin are included; Slack tone is best-effort for Phase 1, pending kickoff confirmation. Any net-new source integration beyond these is a change request.</p></div>
+      <div class="a"><div class="n">04</div><p><b>Jack finalizes the risk definition before the scoring milestone</b> — initial signal weighting, the outstanding thresholds, and the prior high-risk artifacts, delivered before Phase 1 scoring begins.</p></div>
+      <div class="a"><div class="n">05</div><p><b>Insightful provides access</b> to the customer intelligence database and its engineer, and credentials for the direct-pull sources. Anonymized example churned and at-risk accounts are provided before the calibration phase.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="trust">
+  <div class="wrap">
+    <div class="section-label">Why it's trustworthy</div>
+    <div class="guard-quote">Before it's called done, the model runs against real churned and at-risk accounts you already know. <em>If it misses accounts everyone knew were in trouble, it isn't working.</em> That's the pass/fail test.</div>
+    <div class="guard-cols">
+      <div class="col"><h3>Evidence, not opinion</h3><p>These systems are non-deterministic, so "does the risk model work" can't rest on a claim. Running it against accounts Insightful already knows went wrong turns the question into a matter of evidence — the known cases either surface as risky, or the model isn't finished.</p></div>
+      <div class="col"><h3>Explainability is what makes it acted on</h3><p>Every flag carries a typed breakdown and a plain-English reason, so Success and Support can tell a real problem from a known-and-handled one, and prioritize between multiple critical accounts. A team that can see why an account is flagged will work the list.</p></div>
+    </div>
+    <p class="counsel">The definition of risk is expected to sharpen as the model runs — which is why the scoring is tunable and calibration is a real, bounded step rather than a one-time guess on day one.</p>
+  </div>
+</section>
+
+<section class="alt" id="next">
+  <div class="wrap">
+    <div class="section-label">Next steps</div>
+    <h2>Four inputs, and the <em>build begins</em></h2>
+    <div class="steps">
+      <div class="step-card"><div class="k">01</div><h3>Confirm scope and price</h3><p>Agree the deliverables, the phased plan, and the fixed price.</p></div>
+      <div class="step-card"><div class="k">02</div><h3>Jack sends the risk definition</h3><p>The initial signal weighting, the outstanding thresholds, and the prior high-risk artifacts.</p></div>
+      <div class="step-card"><div class="k">03</div><h3>Access granted</h3><p>The customer intelligence database, its engineer, and the direct-pull source credentials.</p></div>
+      <div class="step-card"><div class="k">04</div><h3>Build begins</h3><p>Starting with the scoring foundation — a working risk score per account, verifiable in data.</p></div>
+    </div>
+    <div class="cta">
+      <div class="line">The starting slice is the scoring foundation — <em>a risk score you can check against your own accounts</em></div>
+      <div class="note">Acceptance and signatures are handled in the accompanying document, not here.</div>
+    </div>
+  </div>
+</section>
+
+<div class="rainbow-bar thin"></div>
+<footer>
+  <div class="wrap">
+    <span>Customer Risk Dashboard — Proposal · Atlantic Labs AI</span>
+    <span>Fixed price · $15,000 · Owned by Insightful on final payment</span>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.wf-head').forEach(function(head){
+  head.addEventListener('click',function(){
+    head.parentElement.classList.toggle('open');
+  });
+});
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var target=document.querySelector(a.getAttribute('href'));
+    if(!target)return;
+    e.preventDefault();
+    var y=target.getBoundingClientRect().top+window.scrollY-80;
+    window.scrollTo({top:y,behavior:'smooth'});
+  });
+});
+var sections=['picture','build','delivery','price','scope','trust','next'].map(function(id){return document.getElementById(id)});
+var navLinks=document.querySelectorAll('[data-nav]');
+function track(){
+  var line=window.scrollY+window.innerHeight*0.25;
+  var current=-1;
+  sections.forEach(function(s,i){ if(s && s.offsetTop<=line) current=i; });
+  navLinks.forEach(function(l,i){ l.classList.toggle('active',i===current); });
+}
+window.addEventListener('scroll',track,{passive:true});
+track();
+</script>
+</body>
+</html>
