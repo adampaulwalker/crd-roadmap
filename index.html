@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Customer Risk Dashboard — Proposal</title>
+<title>Customer Risk Dashboard - Proposal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -216,7 +216,7 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
   <div class="wrap" style="position:relative">
     <div class="section-label">Customer Risk Dashboard</div>
     <h1>See churn coming. <em>Act before it costs you the account.</em></h1>
-    <p class="lead">One ranked, explainable view of who's at risk across Core and Premier — an overall churn-risk rating, the reason it's flagged, and the evidence behind it. Built as a scoring layer and dashboard page on top of the customer intelligence database you already run.</p>
+    <p class="lead">One ranked, explainable view of who's at risk across Core and Premier - an overall churn-risk rating, the reason it's flagged, and the evidence behind it. Built as a scoring layer and dashboard page on top of the customer intelligence database you already run.</p>
     <div class="tags">
       <span class="tag">Core + Premier segments</span>
       <span class="tag">Explainable, per account</span>
@@ -241,7 +241,7 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
       <div class="side ai">
         <div class="k">The model does the scoring</div>
         <ul>
-          <li>Transparent weighted scoring — you can always see why an account scored the way it did</li>
+          <li>Transparent weighted scoring - you can always see why an account scored the way it did</li>
           <li>Segment-aware, with renewal proximity as a multiplier</li>
           <li>Calibrated against accounts you already know went wrong</li>
         </ul>
@@ -249,13 +249,13 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
       <div class="side human">
         <div class="k">Jack keeps control</div>
         <ul>
-          <li>Owns the definition of risk — what counts and how much</li>
+          <li>Owns the definition of risk - what counts and how much</li>
           <li>Tunes weights and thresholds himself through the calibration controls</li>
           <li>The judgment stays human; the tool ranks and explains, a person decides</li>
         </ul>
       </div>
     </div>
-    <p class="fineprint">Weighting starts deterministic and simple, leads with Jack's highest-signal factors, and sharpens against real accounts. Thresholds Jack hasn't set yet are wired as tunable parameters, not hard-coded — the definition is expected to firm up as the model runs.</p>
+    <p class="fineprint">Weighting starts deterministic and simple, leads with Jack's highest-signal factors, and sharpens against real accounts. Thresholds Jack hasn't set yet are wired as tunable parameters, not hard-coded - the definition is expected to firm up as the model runs.</p>
     <p class="kicker">The goal the whole thing serves is <b style="color:var(--text)">gross retention</b>: a realistic, prioritized outreach list plus the context to guide the conversation.</p>
     <div class="spine">
       <div class="step"><div class="k">Read</div><p>The customer intelligence database, plus direct pulls for signals that live outside it (Pendo, ForestAdmin)</p></div>
@@ -273,44 +273,44 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
 
     <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 1 · The engine</span><h3>A per-account risk model you can see through</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
       <div class="wf-body">
-        <p>Jack's signal catalog rolled up into one overall churn-risk rating and typed risk tags — so a flag reads as billing, support, or usage, not just "risky."</p>
+        <p>Jack's signal catalog rolled up into one overall churn-risk rating and typed risk tags - so a flag reads as billing, support, or usage, not just "risky."</p>
         <ul>
-          <li>Deterministic, weighted scoring — transparent, so you always see why an account scored the way it did</li>
+          <li>Deterministic, weighted scoring - transparent, so you always see why an account scored the way it did</li>
           <li>Segment-aware weighting: the same signal carries different weight for a Premier account than a Core one, matching how Jack reads risk</li>
-          <li>Renewal proximity as a multiplier — a negative call or sour thread hits harder the closer an account is to renewal</li>
+          <li>Renewal proximity as a multiplier - a negative call or sour thread hits harder the closer an account is to renewal</li>
           <li>Built to extend into Phase 2 scoring on the same backbone, without building it now</li>
         </ul>
       </div></div>
 
     <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 2 · The signals</span><h3>Nineteen signals, drawn from where the data already lives</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
       <div class="wf-body">
-        <p>Jack's catalog across four groups — product usage and adoption, support and product friction, relationship and sentiment, and contextual events (mergers and acquisitions, executive departures, return-to-office mandates).</p>
+        <p>Jack's catalog across four groups - product usage and adoption, support and product friction, relationship and sentiment, and contextual events (mergers and acquisitions, executive departures, return-to-office mandates).</p>
         <ul>
           <li>Sourced from the customer intelligence database where the data already lives</li>
-          <li>Pulled directly where it doesn't — Pendo usage, configuration state from ForestAdmin, Slack channel tone</li>
+          <li>Pulled directly where it doesn't - Pendo usage, configuration state from ForestAdmin, Slack channel tone</li>
           <li>Thresholds Jack hasn't set yet are wired as tunable parameters, not hard-coded</li>
         </ul>
       </div></div>
 
     <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 3 · The dashboard</span><h3>Where the scored judgment surfaces</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
       <div class="wf-body">
-        <p>A ranked, prioritized view of at-risk accounts across Core and Premier — delivered as a page on your existing internal dashboard, available across the company, with Success and Support as the primary audience.</p>
+        <p>A ranked, prioritized view of at-risk accounts across Core and Premier - delivered as a page on your existing internal dashboard, available across the company, with Success and Support as the primary audience.</p>
         <ul>
           <li>Overall rating, typed tags, and a one- or two-sentence "why flagged" summary on every account</li>
           <li>Filters by Customer Success owner and segment</li>
-          <li>Linked evidence — jump to the underlying ticket, conversation, or call</li>
+          <li>Linked evidence - jump to the underlying ticket, conversation, or call</li>
           <li>Daily refresh</li>
         </ul>
       </div></div>
 
     <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 4 · The controls</span><h3>Jack tunes the model himself, without a change request</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
       <div class="wf-body">
-        <p>A simple controls view where Jack adjusts signal weights and thresholds and re-scores — turn a signal up or down, set a threshold, and watch the ranked list shift. This keeps the weighting in his hands day to day and keeps the model honest as the definition of risk sharpens.</p>
+        <p>A simple controls view where Jack adjusts signal weights and thresholds and re-scores - turn a signal up or down, set a threshold, and watch the ranked list shift. This keeps the weighting in his hands day to day and keeps the model honest as the definition of risk sharpens.</p>
         <ul>
           <li>A lightweight configuration surface, not a workflow tool</li>
           <li>Tuning the risk model is included here; acting on a flagged account stays out of Phase 1</li>
         </ul>
-        <span class="tag2">Slack channel tone — best-effort, pending kickoff access confirmation</span>
+        <span class="tag2">Slack channel tone - best-effort, pending kickoff access confirmation</span>
       </div></div>
 
     <div class="wf"><button class="wf-head"><span class="htxt"><span class="kn">Part 5 · Consolidation + calibration</span><h3>The model proven against accounts you already know</h3></span><span class="chev"><svg viewBox="0 0 10 10" fill="none" stroke-width="1.5"><path d="M5 1v8M1 5h8"/></svg></span></button>
@@ -340,7 +340,7 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
       <div class="row">
         <div class="ph">Phase 2</div>
         <div class="item">The dashboard surface</div>
-        <div class="why">The ranked view on the internal dashboard — rating, typed tags, semantic summaries, evidence links, and the owner and segment filters, plus the calibration controls where Jack tunes weights and thresholds. Daily refresh in place. <b>Output: the dashboard Success and Support actually use.</b></div>
+        <div class="why">The ranked view on the internal dashboard - rating, typed tags, semantic summaries, evidence links, and the owner and segment filters, plus the calibration controls where Jack tunes weights and thresholds. Daily refresh in place. <b>Output: the dashboard Success and Support actually use.</b></div>
       </div>
       <div class="row">
         <div class="ph">Phase 3</div>
@@ -348,7 +348,7 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
         <div class="why">Validate the model against Jack's known churned and at-risk accounts, tune until known cases surface, fold in the existing artifacts, and run full QA. <b>Output: a calibrated, trusted, single-source-of-truth dashboard.</b></div>
       </div>
     </div>
-    <div class="aside"><b>How I work:</b> the shape is set up front; the details firm up organically as real accounts move through the model. Some signals will prove stronger than expected, others noisier — which is exactly why the scoring is tunable and calibration is a real step, not an afterthought.</div>
+    <div class="aside"><b>How I work:</b> the shape is set up front; the details firm up organically as real accounts move through the model. Some signals will prove stronger than expected, others noisier - which is exactly why the scoring is tunable and calibration is a real step, not an afterthought.</div>
   </div>
 </section>
 
@@ -373,7 +373,7 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
         </div>
       </div>
     </div>
-    <p class="fineprint" style="margin-top:32px;margin-bottom:0">The model, the segment-aware weighting, and the validation are where the work sits. Bug fixes for delivered functionality are included for 30 days after final delivery. All work product — source code, configuration, and documentation — is owned by Insightful on final payment.</p>
+    <p class="fineprint" style="margin-top:32px;margin-bottom:0">The model, the segment-aware weighting, and the validation are where the work sits. Bug fixes for delivered functionality are included for 30 days after final delivery. All work product - source code, configuration, and documentation - is owned by Insightful on final payment.</p>
   </div>
 </section>
 
@@ -384,9 +384,9 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
     <p class="lead">Phase 1 is deliberately a scoring-and-surface project, not an open-ended data-integration one. Naming the edges now keeps the fixed price predictable for both sides.</p>
     <div class="scope">
       <div class="col in">
-        <div class="k">In scope — Phase 1</div>
+        <div class="k">In scope - Phase 1</div>
         <ul>
-          <li><b>The scoring engine</b> — composite rating, typed tags, segment-aware weighting, renewal multiplier</li>
+          <li><b>The scoring engine</b> - composite rating, typed tags, segment-aware weighting, renewal multiplier</li>
           <li><b>The dashboard page</b> on your existing internal dashboard, with owner and segment filters and evidence links</li>
           <li><b>The calibration controls</b> for tuning weights and thresholds</li>
           <li><b>Direct pulls</b> from Pendo and ForestAdmin; Slack tone best-effort</li>
@@ -407,9 +407,9 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
     <p class="assume-lead">These are the things the price rests on. If one turns out different, it's a repricing conversation, not a silent absorption.</p>
     <div class="assume">
       <div class="a"><div class="n">01</div><p><b>The customer intelligence database already consolidates most source signals and is queryable.</b> The risk layer builds on top of it. Significant new source ingestion into that database is separate scope.</p></div>
-      <div class="a"><div class="n">02</div><p><b>Risk surfaces as a new layer on the existing infrastructure</b> — a scoring layer plus a dashboard page reading the existing store — not a new standalone database. Daily batch refresh, not real-time.</p></div>
+      <div class="a"><div class="n">02</div><p><b>Risk surfaces as a new layer on the existing infrastructure</b> - a scoring layer plus a dashboard page reading the existing store - not a new standalone database. Daily batch refresh, not real-time.</p></div>
       <div class="a"><div class="n">03</div><p><b>Direct-source pulls are bounded.</b> Pendo and ForestAdmin are included; Slack tone is best-effort for Phase 1, pending kickoff confirmation. Any net-new source integration beyond these is a change request.</p></div>
-      <div class="a"><div class="n">04</div><p><b>Jack finalizes the risk definition before the scoring milestone</b> — initial signal weighting, the outstanding thresholds, and the prior high-risk artifacts, delivered before Phase 1 scoring begins.</p></div>
+      <div class="a"><div class="n">04</div><p><b>Jack finalizes the risk definition before the scoring milestone</b> - initial signal weighting, the outstanding thresholds, and the prior high-risk artifacts, delivered before Phase 1 scoring begins.</p></div>
       <div class="a"><div class="n">05</div><p><b>Insightful provides access</b> to the customer intelligence database and its engineer, and credentials for the direct-pull sources. Anonymized example churned and at-risk accounts are provided before the calibration phase.</p></div>
     </div>
   </div>
@@ -420,10 +420,10 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
     <div class="section-label">Why it's trustworthy</div>
     <div class="guard-quote">Before it's called done, the model runs against real churned and at-risk accounts you already know. <em>If it misses accounts everyone knew were in trouble, it isn't working.</em> That's the pass/fail test.</div>
     <div class="guard-cols">
-      <div class="col"><h3>Evidence, not opinion</h3><p>These systems are non-deterministic, so "does the risk model work" can't rest on a claim. Running it against accounts Insightful already knows went wrong turns the question into a matter of evidence — the known cases either surface as risky, or the model isn't finished.</p></div>
+      <div class="col"><h3>Evidence, not opinion</h3><p>These systems are non-deterministic, so "does the risk model work" can't rest on a claim. Running it against accounts Insightful already knows went wrong turns the question into a matter of evidence - the known cases either surface as risky, or the model isn't finished.</p></div>
       <div class="col"><h3>Explainability is what makes it acted on</h3><p>Every flag carries a typed breakdown and a plain-English reason, so Success and Support can tell a real problem from a known-and-handled one, and prioritize between multiple critical accounts. A team that can see why an account is flagged will work the list.</p></div>
     </div>
-    <p class="counsel">The definition of risk is expected to sharpen as the model runs — which is why the scoring is tunable and calibration is a real, bounded step rather than a one-time guess on day one.</p>
+    <p class="counsel">The definition of risk is expected to sharpen as the model runs - which is why the scoring is tunable and calibration is a real, bounded step rather than a one-time guess on day one.</p>
   </div>
 </section>
 
@@ -435,10 +435,10 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
       <div class="step-card"><div class="k">01</div><h3>Confirm scope and price</h3><p>Agree the deliverables, the phased plan, and the fixed price.</p></div>
       <div class="step-card"><div class="k">02</div><h3>Jack sends the risk definition</h3><p>The initial signal weighting, the outstanding thresholds, and the prior high-risk artifacts.</p></div>
       <div class="step-card"><div class="k">03</div><h3>Access granted</h3><p>The customer intelligence database, its engineer, and the direct-pull source credentials.</p></div>
-      <div class="step-card"><div class="k">04</div><h3>Build begins</h3><p>Starting with the scoring foundation — a working risk score per account, verifiable in data.</p></div>
+      <div class="step-card"><div class="k">04</div><h3>Build begins</h3><p>Starting with the scoring foundation - a working risk score per account, verifiable in data.</p></div>
     </div>
     <div class="cta">
-      <div class="line">The starting slice is the scoring foundation — <em>a risk score you can check against your own accounts</em></div>
+      <div class="line">The starting slice is the scoring foundation - <em>a risk score you can check against your own accounts</em></div>
       <div class="note">Acceptance and signatures are handled in the accompanying document, not here.</div>
     </div>
   </div>
@@ -447,7 +447,7 @@ footer .wrap{display:flex;justify-content:space-between;font-family:'DM Mono',mo
 <div class="rainbow-bar thin"></div>
 <footer>
   <div class="wrap">
-    <span>Customer Risk Dashboard — Proposal · Atlantic Labs AI</span>
+    <span>Customer Risk Dashboard - Proposal · Atlantic Labs AI</span>
     <span>Fixed price · $15,000 · Owned by Insightful on final payment</span>
   </div>
 </footer>
